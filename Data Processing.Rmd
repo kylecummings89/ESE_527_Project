@@ -1,0 +1,103 @@
+---
+title: "ESE 527 Mid Semester Project"
+author: "Kyle Cummings"
+date: "March 11, 2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(OutlierDetection)
+library(OutliersO3)
+library(outliers)
+```
+
+## Summary Statistics
+
+
+
+```{r}
+read.data <- read.csv("C:\\Users\\kcumm\\OneDrive\\Documents\\Graduate School\\ESE 527 - Practicum in Data Analytics\\Final Project\\Data\\findata.csv")
+data<-read.data[10:37]
+capture.output(print(summary(data), prmsd=TRUE, digits=2), file="out.txt")
+```
+
+## Historgrams of X-Variables
+
+```{r}
+COGS<-data['Cost.of.Goods.Sold']
+LTDI<-data['Long.Term.Debt.Issuance']
+NI<-data['Net.Income']
+
+plot(COGS[,1])
+plot(LTDI[,1])
+plot(NI[,1])
+
+hist(COGS[,1])
+hist(LTDI[,1])
+hist(NI[,1])
+```
+
+## Fraud Frequency by Year
+
+```{r}
+misstates<-read.data[9]
+year<-read.data[1]
+ms.by.year<-rbind(year,misstates)
+head(ms.by.year)
+```
+
+## Outlier Detection?
+
+```{r}
+data<-read.data[9:37]
+data2<-data[1:112981,]
+set.seed(101) # Set Seed so that same sample can be reproduced in future also
+# Now Selecting 75% of data as sample from total 'n' rows of the data  
+sample <- sample.int(n = nrow(data2), size = floor(.5*nrow(data2)), replace = F)
+train <- data2[sample, ]
+test  <- data2[-sample, ]
+train1<-train[2:28]
+misstates<-train[1]
+outliers1<-nnk(train1)
+outliers2<-dens(train1)
+outliers3<-disp(train1)
+```
+
+
+```{r}
+outliers1.misstate<-c()
+for (i in outliers1[2])
+{
+  outliers1.misstate<-append(outliers1.misstate, (misstates[i,]))
+}
+
+sum(outliers1.misstate)#/length(outliers1.misstate)
+
+outliers2.misstate<-c()
+for (i in outliers2[2])
+{
+  outliers2.misstate<-append(outliers2.misstate, (misstates[i,]))
+}
+
+sum(outliers2.misstate)#/length(outliers2.misstate)
+
+outliers3.misstate<-c()
+for (i in outliers3[2])
+{
+  outliers3.misstate<-append(outliers3.misstate, (misstates[i,]))
+}
+
+sum(outliers3.misstate)#/length(outliers3.misstate)
+
+
+common.outliers<-Reduce(intersect, c(outliers3[2],outliers2[2],outliers1[2]))
+
+common.ouliers.misstate<-c()
+for (i in common.outliers)
+{
+  common.ouliers.misstate<-append(common.ouliers.misstate, (misstates[i,]))
+}
+
+sum(common.ouliers.misstate)#/length(outliers3.misstate)
+```
+
