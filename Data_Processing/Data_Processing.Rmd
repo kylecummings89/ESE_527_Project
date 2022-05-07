@@ -1,0 +1,62 @@
+---
+title: "Data_Processing"
+author: "Kyle Cummings"
+date: "March 11, 2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+
+```
+
+## Summary Statistics
+
+
+
+```{r}
+read.data <- read.csv("C:\\Users\\kcumm\\OneDrive\\Documents\\Graduate School\\ESE 527 - Practicum in Data Analytics\\Final Project\\Data\\findata.csv")
+data<-read.data[10:37]
+capture.output(print(summary(data), prmsd=TRUE, digits=2), file="out.txt")
+```
+
+## Historgrams of X-Variables
+
+```{r}
+TA<-data['Total.Assets']
+AP<-data['Accounts.Payable']
+NI<-data['Net.Income']
+
+plot(TA[,1])
+plot(AP[,1])
+plot(NI[,1])
+
+hist(TA[,1],freq=TRUE)
+hist(AP[,1],freq=TRUE)
+hist(NI[,1])
+```
+
+## Fraud Frequency by Year
+
+```{r}
+Fraud<-read.data[9]
+Year<-read.data[1]
+frequency<-cbind(Year,Fraud)
+freq.by.year<-aggregate(Fraud~Year,frequency,sum)
+freq.by.year
+capture.output(print(freq.by.year, prmsd=TRUE, digits=2), file="out2.txt")
+```
+
+## Pairs Function Applied
+
+```{r}
+data.splice<-data[1000:3000,]
+data.splice.1<-data.splice[,1:7]
+data.splice.2<-data.splice[,8:14]
+data.splice.3<-data.splice[,15:21]
+data.splice.4<-data.splice[,21:28]
+pairs(data.splice.1)
+pairs(data.splice.2)
+pairs(data.splice.3)
+pairs(data.splice.4)
+pairs(data.splice)
+```
