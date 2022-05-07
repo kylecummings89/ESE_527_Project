@@ -96,6 +96,7 @@ def main():
         txp,
         txt,
         xint,
+        prcc_f,
         EBIT
         FROM comp.funda WHERE fyear >= 1990 AND fyear <= 2022 AND exchg BETWEEN 11 AND 20
         AND
@@ -126,11 +127,12 @@ def main():
         txp IS NOT NULL AND
         txt IS NOT NULL AND
         xint IS NOT NULL AND
+        prcc_f IS NOT NULL AND
         EBIT IS NOT NULL
     """)
     df_data = pd.DataFrame(data)
     print(f'Shape is {df_data.shape}')
-    df_data.to_csv('1990_2021_sample.csv')
+    df_data.to_csv('full_sample.csv')
     print('Job done m\'lord')
 
     # df = pd.DataFrame({'tables': tables})
